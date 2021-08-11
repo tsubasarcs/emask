@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 
 class ShopFactory extends Factory
 {
-    protected array $address = [
+    protected array $convenience_store_address = [
         '台北市松山區民權東路三段108號',
         '台北市松山區民權東路三段160巷9號1樓',
         '台北市松山區民權東路三段103巷15-1號',
@@ -33,7 +33,7 @@ class ShopFactory extends Factory
     {
         return [
             'code' => str_pad((string)rand(0, 999999999999999), 15, "0", STR_PAD_LEFT),
-            'address' => Arr::random($this->address),
+            'address' => Arr::random($this->convenience_store_address),
         ];
     }
 }
