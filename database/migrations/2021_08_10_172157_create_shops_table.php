@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Grimzy\LaravelMysqlSpatial\Schema\Blueprint;
 
 class CreateShopsTable extends Migration
 {
@@ -17,8 +17,7 @@ class CreateShopsTable extends Migration
             $table->id();
             $table->string('code', 15)->unique()->comment('場所代碼');
             $table->string('address')->unique()->comment('地址');
-            $table->point('location', 4326)->nullable();
-            $table->polygon('area', 4326)->nullable();
+            $table->point('location', 4326)->nullable()->comment('Google Geocoder point');
             $table->timestamps();
         });
     }

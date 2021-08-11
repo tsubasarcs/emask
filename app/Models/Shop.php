@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Shop extends Model
 {
     use HasFactory;
+    use SpatialTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +20,9 @@ class Shop extends Model
         'code',
         'address',
         'location',
-        'area',
+    ];
+
+    protected $spatialFields = [
+        'location',
     ];
 }
