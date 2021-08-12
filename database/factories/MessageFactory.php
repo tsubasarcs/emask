@@ -19,10 +19,11 @@ class MessageFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'phone_number' => '09' . str_pad((string)rand(0, 99999999), 8, "0", STR_PAD_LEFT),
+            'send_at' => $this->faker->dateTime(),
         ];
     }
 }

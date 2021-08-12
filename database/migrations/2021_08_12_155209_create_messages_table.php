@@ -15,6 +15,9 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('shop_id')->comment('shop foreign key')->constrained()->onDelete('cascade');
+            $table->string('phone_number')->comment('user phone number');
+            $table->dateTime('send_at')->comment('message send_at');
             $table->timestamps();
         });
     }
