@@ -16,6 +16,7 @@ class Message extends Model
      * @var array
      */
     protected $fillable = [
+        'shop_id',
         'phone_number',
         'send_at',
     ];
@@ -26,7 +27,7 @@ class Message extends Model
      * @var array
      */
     protected $casts = [
-        'send_at' => 'datetime',
+        'send_at' => 'datetime:Y-m-d\TH:i:s',
     ];
 
     /**

@@ -35,7 +35,7 @@ class ShopControllerTest extends TestCase
             ->with($address)
             ->andReturn($this->faker->getSuccessResponse);
 
-        $response = $this->postJson(route('api.v1.shop.post'), [
+        $response = $this->postJson(route('api.v1.shops.post'), [
             'address' => $address
         ]);
 
@@ -59,7 +59,7 @@ class ShopControllerTest extends TestCase
      */
     public function it_should_return_422_when_address_input_is_empty()
     {
-        $response = $this->postJson(route('api.v1.shop.post'), [
+        $response = $this->postJson(route('api.v1.shops.post'), [
             'address' => ''
         ]);
 
@@ -90,7 +90,7 @@ class ShopControllerTest extends TestCase
             ->with($address)
             ->andReturn($this->faker->getFailedResponse);
 
-        $response = $this->postJson(route('api.v1.shop.post'), [
+        $response = $this->postJson(route('api.v1.shops.post'), [
             'address' => $address,
         ]);
 
@@ -121,7 +121,7 @@ class ShopControllerTest extends TestCase
             ->with($address)
             ->andReturn($this->faker->getFailedResponse);
 
-        $response = $this->postJson(route('api.v1.shop.post'), [
+        $response = $this->postJson(route('api.v1.shops.post'), [
             'address' => $address,
         ]);
 
