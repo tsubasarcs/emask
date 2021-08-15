@@ -445,7 +445,7 @@ class MessageControllerTest extends TestCase
         ]);
 
         $form_params = [
-            'time' => $message1->send_at,
+            'time' => $message1->send_at->format('Y-m-d\TH:i:s'),
             'from' => $message1->phone_number,
         ];
 
@@ -522,7 +522,7 @@ class MessageControllerTest extends TestCase
         ]);
 
         $form_params = [
-            'time' => Carbon::now(),
+            'time' => Carbon::now()->format('Y-m-d\TH:i:s'),
             'from' => '0912345678',
         ];
 
@@ -591,7 +591,7 @@ class MessageControllerTest extends TestCase
         ]);
 
         $form_params = [
-            'time' => $message1->send_at,
+            'time' => $message1->send_at->format('Y-m-d\TH:i:s'),
             'from' => $message1->phone_number,
         ];
 

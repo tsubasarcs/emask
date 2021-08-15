@@ -1,62 +1,128 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# EMask
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## local environment
 
-## About Laravel
+Recommended to use [Laravel Sail](https://laravel.com/docs/8.x/sail), you can refer to the "docker-compose.yml" file under the directory.
+needing:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- php8.
+- mysql8.
+- redis.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The project used redis, please set `CACHE_DRIVER=redis` in your `.env` file.
 
-## Learning Laravel
+The project used queue, please set `QUEUE_CONNECTION=redis` in your `.env` file.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+The project used [Google's geocoding service](https://developers.google.com/maps/documentation/geocoding/start), please get api key from your own Google Cloud Platform, and set `GOOGLE_MAPS_GEOCODING_API_KEY` in your `.env` file.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## API
 
-## Laravel Sponsors
+### [POST] /api/v1/shops
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+generate shop code from address.
 
-### Premium Partners
+#### header
+```
+Accept: appliaction/json
+Content-Type: appliaction/json
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
+#### request
+```
+{
+    "address": "台北市松山區民權東路三段106巷3弄5號7樓"
+}
+```
 
-## Contributing
+#### response(200)
+```
+{
+    "status": 1,
+    "data": {
+        "code": "890950546400095"
+    }
+}
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### response(422)
+```
+{
+    "message": "The given data was invalid.",
+    "errors": {
+        "address": [
+            "地址必須填寫"
+        ]
+    }
+}
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### [POST] /api/v1/messages
 
-## Security Vulnerabilities
+SMS record.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### header
+```
+Accept: appliaction/json
+Content-Type: appliaction/json
+```
 
-## License
+#### request
+```
+{
+    "time": "2021-01-01T00:00:00",
+    "from": "0912345678",
+    "text": "場所代碼：1111 1111 1111 111\n本簡訊是簡訊實聯制發送，限防疫目的使用
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### response(204)
+
+---
+
+### [POST] /api/v1/messages/search
+
+Search point distance sphere 50m and 7days of infected.
+
+#### header
+```
+Accept: appliaction/json
+Content-Type: appliaction/json
+```
+
+#### request
+```
+{
+    "time": "2021-01-01T00:00:00",
+    "from": "0912345678"
+}
+```
+
+#### response(200)
+
+```
+{
+    "status": 1,
+    "data": [
+        {
+            "phone_number": "0912345678",
+            "shop_address": "台北市松山區民權東路三段106巷3弄5號7樓",
+            "shop_code": "890950546400095",
+            "send_at": "2021-01-01T00:00:00"
+        }
+    ]
+}
+```
+
+#### response(400)
+
+```
+{
+    "status": 0,
+    "data": []
+}
+```
+---

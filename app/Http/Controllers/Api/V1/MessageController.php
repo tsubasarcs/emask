@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\MessageCreating;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SearchMessageRequest;
 use App\Http\Requests\StoreMessageRequest;
 use App\Services\MessageService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class MessageController extends Controller
@@ -35,10 +35,10 @@ class MessageController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param SearchMessageRequest $request
      * @return Response
      */
-    public function search(Request $request): Response
+    public function search(SearchMessageRequest $request): Response
     {
         try {
             $messages = $this->messageService->search([
