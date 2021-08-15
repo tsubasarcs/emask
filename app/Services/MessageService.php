@@ -2,8 +2,12 @@
 
 namespace App\Services;
 
+use App\Exceptions\ShopLocationNotFoundException;
 use App\Models\Message;
 use App\Repositories\MessageRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class MessageService
@@ -44,5 +48,25 @@ class MessageService
         }
 
         return preg_replace('/[^0-9]/', '', $number);
+    }
+
+    /**
+     * @param array $attributes
+     * @return Message[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Builder[]|Collection
+     * @throws ShopLocationNotFoundException
+     */
+    public function search(array $attributes)
+    {
+        $message = $this->messageRepository->findByPhoneNumberAndSendAt($attributes);
+
+        if (empty($message)) {
+            throw new ModelNotFoundException();
+        }
+
+        if (empty($message->shop) or empty($message->shop->location)) {
+            throw new ShopLocationNotFoundException();
+        }
+
+        return $this->messageRepository->getInfected($message);
     }
 }

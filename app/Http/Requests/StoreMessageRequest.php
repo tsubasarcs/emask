@@ -80,7 +80,7 @@ class StoreMessageRequest extends FormRequest
 
         if (!empty($text)) {
             $this->merge([
-                'text' => preg_replace('/[^0-9]/', '', $text),
+                'text' => substr(preg_replace('/[^0-9]/', '', $text), 0, 15),
             ]);
         }
     }
